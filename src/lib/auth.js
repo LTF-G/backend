@@ -1,6 +1,6 @@
 const bcrypt = require("bcrypt");
 const jwt = require("../util/jwt");
-const redisClient = require("../util/redis");
+const redisClient = require("../util/redis_auth");
 const { User } = require("../models");
 
 /**

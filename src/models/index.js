@@ -2,10 +2,10 @@ const Sequelize = require("sequelize");
 require("dotenv").config();
 
 const config = {
-    username: "junhyuk",
-    password: "capstone2022",
-    database: "mydb",
-    host: "127.0.0.1",
+    username: process.env.POSTGRESQL_USERNAME,
+    password: process.env.POSTGRESQL_PASSWORD,
+    database: process.env.POSTGRESQL_DATABASE,
+    host: process.env.POSTGRESQL_HOST,
     dialect: "postgres",
 };
 

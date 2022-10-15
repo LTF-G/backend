@@ -4,7 +4,7 @@ const { Authorized } = require("../middlewares/authorized");
 const router = express.Router();
 
 /**
- * POST /webrtcchannel/
+ * POST /channel/
  * @param {string} requestBody.channelName - Name of the channel
  * @param {string} requestBody.role - Which role to get channel info
  * @return
@@ -21,7 +21,7 @@ router.post("/", Authorized, async (req, res) => {
 });
 
 /**
- * GET /webrtcchannel/master/:channelName
+ * GET /channel/master/:channelName
  * @param {string} routeParameter.channelName
  * @return
  */
@@ -37,7 +37,7 @@ router.get("/master/:channelName", Authorized, async (req, res) => {
 });
 
 /**
- * GET /webrtcchannel/viewer/:channelName/:clientId
+ * GET /channel/viewer/:channelName/:clientId
  * @param {string} routeParameter.channelName
  * @return
  */
@@ -53,7 +53,7 @@ router.get("/viewer/:channelName/:clientId", Authorized, async (req, res) => {
 });
 
 /**
- * DELETE /webrtcchannel/:channelName
+ * DELETE /channel/:channelName
  * @param {string} routeParameter.channelName
  * @return
  */

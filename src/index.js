@@ -6,6 +6,8 @@ const cors = require("cors");
 
 const WebRTCChannelRouter = require("./routes/WebRTCChannel");
 const AuthenticateRouter = require("./routes/Auth");
+const ConnectionPollRouter = require("./routes/ConnectionPoll");
+
 require("./models").sequelize.sync();
 require("dotenv").config();
 
@@ -29,11 +31,13 @@ app.get("/", (req, res) => {
     });
 });
 
-app.use("/webrtcchannel", WebRTCChannelRouter);
+app.use("/channel", WebRTCChannelRouter);
 app.use("/auth", AuthenticateRouter);
+app.use("/polling", ConnectionPollRouter);
+app.user;
 
 const server = https.createServer(options, app);
 
-server.listen(3000, () => {
-    console.log("app running on port : 3000");
+server.listen(8484, () => {
+    console.log("app running on port : 8484");
 });
