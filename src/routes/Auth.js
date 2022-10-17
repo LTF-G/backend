@@ -12,8 +12,8 @@ const router = express.Router();
  */
 router.post("/register", notAuthorized, async (req, res) => {
     const { userid, password, nickname } = req.body;
-    const status = await register(userid, password, nickname);
-    return res.status(status.statusCode).send(status);
+    const response = await register(userid, password, nickname);
+    return res.status(response.statusCode).send(response);
 });
 
 /**
@@ -24,8 +24,8 @@ router.post("/register", notAuthorized, async (req, res) => {
  */
 router.post("/login", notAuthorized, async (req, res) => {
     const { userid, password } = req.body;
-    const status = await login(userid, password);
-    return res.status(status.statusCode).send(status);
+    const response = await login(userid, password);
+    return res.status(response.statusCode).send(response);
 });
 
 module.exports = router;

@@ -4,9 +4,9 @@ const fs = require("fs");
 const path = require("path");
 const cors = require("cors");
 
-const WebRTCChannelRouter = require("./routes/WebRTCChannel");
+// const WebRTCChannelRouter = require("./routes/WebRTCChannel");
 const AuthenticateRouter = require("./routes/Auth");
-const ConnectionPollRouter = require("./routes/ConnectionPoll");
+const ChannelRouter = require("./routes/Channel");
 
 require("./models").sequelize.sync();
 require("dotenv").config();
@@ -31,9 +31,9 @@ app.get("/", (req, res) => {
     });
 });
 
-app.use("/channel", WebRTCChannelRouter);
+// app.use("/channel", WebRTCChannelRouter);
 app.use("/auth", AuthenticateRouter);
-app.use("/polling", ConnectionPollRouter);
+app.use("/channel", ChannelRouter);
 app.user;
 
 const server = https.createServer(options, app);

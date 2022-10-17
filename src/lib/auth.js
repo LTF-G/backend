@@ -28,17 +28,19 @@ module.exports.register = async (userid, password, nickname) => {
                 password: hash,
                 nickname,
             });
-            return res.status(200).send({
+            return {
+                statusCode: 200,
                 ok: true,
-                message: "the account is successfully created",
-            });
+                message: "account is successfully created",
+            };
         }
     } catch (e) {
         console.error(e);
-        return res.status(500).send({
+        return {
+            statusCode: 500,
             ok: false,
             message: "internal server error",
-        });
+        };
     }
 };
 
