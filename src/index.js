@@ -3,8 +3,8 @@ const https = require("https");
 const fs = require("fs");
 const path = require("path");
 const cors = require("cors");
+var cookies = require("cookie-parser");
 
-// const WebRTCChannelRouter = require("./routes/WebRTCChannel");
 const AuthenticateRouter = require("./routes/Auth");
 const ChannelRouter = require("./routes/Channel");
 
@@ -20,6 +20,7 @@ const options = {
 };
 
 app.use(cors());
+app.use(cookies());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
@@ -31,7 +32,6 @@ app.get("/", (req, res) => {
     });
 });
 
-// app.use("/channel", WebRTCChannelRouter);
 app.use("/auth", AuthenticateRouter);
 app.use("/channel", ChannelRouter);
 app.user;

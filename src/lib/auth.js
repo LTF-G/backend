@@ -23,7 +23,7 @@ module.exports.register = async (userid, password, nickname) => {
         } else {
             // create row in user account table
             const hash = await bcrypt.hash(password, 12);
-            await Users.create({
+            await User.create({
                 userid,
                 password: hash,
                 nickname,
@@ -58,13 +58,20 @@ module.exports.login = async (userid, password) => {
                 userid,
             },
         });
-        success = await bcrypt.compare(password, idExist.password);
+
+        if (idExist) success = await bcrypt.compare(password, idExist.password);
+        else
+            return {
+                statusCode: 401,
+                ok: false,
+                message: "id is not exists",
+            };
     } catch (e) {
         console.error(e);
         return {
-            statusCode: 401,
+            statusCode: 500,
             ok: false,
-            message: "login failed",
+            message: e,
         };
     }
 

@@ -5,7 +5,7 @@ const router = express.Router();
 
 /**
  * POST /auth/register - Register Account
- * @param {string} requestBody.id - User id of the account
+ * @param {string} requestBody.userid - User id of the account
  * @param {string} requestBody.password - Password of the account
  * @param {string} requestBody.nickname - Nickname of the account
  * @return {{statusCode: int, ok: boolean, message: string}} Result of registration

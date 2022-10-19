@@ -1,3 +1,4 @@
+const { KinesisVideoSignalingChannels } = require("aws-sdk");
 const { promisify } = require("util");
 const redisClient = require("../util/redis_channel");
 const kinesis = require("./kinesis");
@@ -11,12 +12,13 @@ const async_get = promisify(redisClient.get).bind(redisClient);
  * @return {{statusCode: int, ok: boolean, message: string, createdChannelData?: object}} result of creating channel
  */
 async function createChannel(userIp, channelName) {
-    const channelData = await async_get(user_Ip);
+    const channelData = await async_get(userIp);
 
     if (channelData == null) {
         try {
-            const createdChannelData = await kinesis.createChannel(channelName, "VIEWER");
-            redisClient.set(userIp, createdChannelData);
+            const createdChannelData = await kinesis.createChannel(channelName, "VIEWER", "client");
+            const deviceChannelData = await kinesis.getChannelInfo(channelName, "MASTER", "client");
+            redisClient.set(userIp, JSON.stringify(deviceChannelData));
             redisClient.expire(userIp, 60);
             return {
                 statusCode: 200,
@@ -45,7 +47,7 @@ async function createChannel(userIp, channelName) {
  * @return {{statusCode: int, ok: boolean, message: string, createdChannelData?: object}} result of creating channel
  */
 async function checkConnectionCreated(userIp) {
-    const channelData = await async_get.get(userIp);
+    const channelData = await async_get(userIp);
 
     if (channelData == null) {
         return {
@@ -60,10 +62,31 @@ async function checkConnectionCreated(userIp) {
             message: "a connection is created",
         };
     } else {
+        redisClient.expire(userIp, 60);
         return {
             statusCode: 200,
             ok: true,
             message: "a connection is not created",
+        };
+    }
+}
+
+async function deleteChannel(userIp, channelName) {
+    const channelData = await async_get(userIp);
+
+    if (channelData !== null) {
+        redisClient.del(userIp);
+        kinesis.deleteChannel(channelName);
+        return {
+            statusCode: 200,
+            ok: true,
+            message: "a channel is successfully deleted",
+        };
+    } else {
+        return {
+            statusCode: 400,
+            ok: false,
+            message: "a channel is not exists",
         };
     }
 }
@@ -73,7 +96,7 @@ async function checkConnectionCreated(userIp) {
  * @return {{statusCode: int, ok: boolean, message: string, createdChannelData?: object}} result of existing channel
  */
 async function searchChannel(userIp) {
-    const channelData = await async_get.get(userIp);
+    const channelData = await async_get(userIp);
 
     if (channelData == null) {
         return {
@@ -88,6 +111,9 @@ async function searchChannel(userIp) {
             message: "a connection is already created",
         };
     } else {
+        redisClient.set(userIp, "Connected");
+        redisClient.expire(userIp, 60);
+
         return {
             statusCode: 200,
             ok: true,
@@ -97,8 +123,9 @@ async function searchChannel(userIp) {
     }
 }
 
-module.exporrts = {
+module.exports = {
     createChannel,
     checkConnectionCreated,
+    deleteChannel,
     searchChannel,
 };
