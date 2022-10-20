@@ -11,14 +11,13 @@ const async_get = promisify(redisClient.get).bind(redisClient);
  * @param {string} channelName - Name of the channel to create
  * @return {{statusCode: int, ok: boolean, message: string, createdChannelData?: object}} result of creating channel
  */
-async function createChannel(userIp, channelName) {
+async function createChannel(userIp) {
     const channelData = await async_get(userIp);
 
-    if (channelData == null) {
+    if (channelData === null) {
         try {
-            const createdChannelData = await kinesis.createChannel(channelName, "VIEWER", "client");
-            const deviceChannelData = await kinesis.getChannelInfo(channelName, "MASTER", "client");
-            redisClient.set(userIp, JSON.stringify(deviceChannelData));
+            const createdChannelData = await kinesis.createChannel(userIp, "MASTER");
+            redisClient.set(userIp, "Created");
             redisClient.expire(userIp, 60);
             return {
                 statusCode: 200,
@@ -71,12 +70,12 @@ async function checkConnectionCreated(userIp) {
     }
 }
 
-async function deleteChannel(userIp, channelName) {
+async function deleteChannel(userIp) {
     const channelData = await async_get(userIp);
 
     if (channelData !== null) {
         redisClient.del(userIp);
-        kinesis.deleteChannel(channelName);
+        kinesis.deleteChannel(userIp);
         return {
             statusCode: 200,
             ok: true,
@@ -118,7 +117,7 @@ async function searchChannel(userIp) {
             statusCode: 200,
             ok: true,
             message: "a connection is already created",
-            channelData,
+            channelData: await kinesis.getChannelInfo(userIp, "VIEWER", "cient"),
         };
     }
 }

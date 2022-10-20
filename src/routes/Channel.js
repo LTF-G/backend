@@ -11,7 +11,7 @@ router.post("/mobile", Authorized, async (req, res) => {
     const ipComponents = req.socket.remoteAddress.split(":");
     const ipv4 = ipComponents[ipComponents.length - 1];
     try {
-        const response = await createChannel(ipv4, "CHANNELNAME");
+        const response = await createChannel(ipv4);
         return res.status(response.statusCode).send(response);
     } catch (e) {
         console.log(e);
@@ -35,7 +35,7 @@ router.delete("/mobile", Authorized, async (req, res) => {
     const ipComponents = req.socket.remoteAddress.split(":");
     const ipv4 = ipComponents[ipComponents.length - 1];
     try {
-        const response = await deleteChannel(ipv4, "CHANNELNAME");
+        const response = await deleteChannel(ipv4);
         return res.status(response.statusCode).send(response);
     } catch (e) {
         console.log(e);
