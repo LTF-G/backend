@@ -7,6 +7,8 @@ var cookies = require("cookie-parser");
 
 const AuthenticateRouter = require("./routes/Auth");
 const ChannelRouter = require("./routes/Channel");
+const ConnectionRouter = require("./routes/Connection");
+const SleepstatRouter = require("./routes/Sleepstat");
 
 require("./models").sequelize.sync();
 require("dotenv").config();
@@ -34,7 +36,8 @@ app.get("/", (req, res) => {
 
 app.use("/auth", AuthenticateRouter);
 app.use("/channel", ChannelRouter);
-app.user;
+app.use("/connection", ConnectionRouter);
+app.use("/sleep", SleepstatRouter);
 
 const server = https.createServer(options, app);
 

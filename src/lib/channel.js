@@ -1,4 +1,3 @@
-const { KinesisVideoSignalingChannels } = require("aws-sdk");
 const { promisify } = require("util");
 const redisClient = require("../util/redis_channel");
 const kinesis = require("./kinesis");
@@ -6,9 +5,8 @@ const kinesis = require("./kinesis");
 const async_get = promisify(redisClient.get).bind(redisClient);
 
 /**
+ * create a channel
  * @param {string} userIp - Public IP address of mobile user
- * @param {string} username - Public IP address of mobile user
- * @param {string} channelName - Name of the channel to create
  * @return {{statusCode: int, ok: boolean, message: string, createdChannelData?: object}} result of creating channel
  */
 async function createChannel(userIp) {
@@ -42,8 +40,9 @@ async function createChannel(userIp) {
 }
 
 /**
+ * check if a connection between device and mobile frontend is established
  * @param {string} userIp - Public IP address of mobile user
- * @return {{statusCode: int, ok: boolean, message: string, createdChannelData?: object}} result of creating channel
+ * @return {{statusCode: int, ok: boolean, message: string}} result of checking
  */
 async function checkConnectionCreated(userIp) {
     const channelData = await async_get(userIp);
@@ -70,6 +69,11 @@ async function checkConnectionCreated(userIp) {
     }
 }
 
+/**
+ * delete existing channel and connection
+ * @param {string} userIp - Public IP address of mobile user
+ * @return {{statusCode: int, ok: boolean, message: string, createdChannelData?: object}} result of creating channel
+ */
 async function deleteChannel(userIp) {
     const channelData = await async_get(userIp);
 
@@ -91,6 +95,7 @@ async function deleteChannel(userIp) {
 }
 
 /**
+ * check if a channel is created. if then, establish a connection.
  * @param {string} userIp - Public IP address of mobile user
  * @return {{statusCode: int, ok: boolean, message: string, createdChannelData?: object}} result of existing channel
  */
@@ -111,12 +116,11 @@ async function searchChannel(userIp) {
         };
     } else {
         redisClient.set(userIp, "Connected");
-        redisClient.expire(userIp, 60);
 
         return {
             statusCode: 200,
             ok: true,
-            message: "a connection is already created",
+            message: "a connection is created",
             channelData: await kinesis.getChannelInfo(userIp, "VIEWER", "cient"),
         };
     }
