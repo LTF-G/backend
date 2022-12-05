@@ -19,6 +19,9 @@ router.post("/mobile", Authorized, async (req, res) => {
     }
 });
 
+/**
+ * GET /channel/mobule - Create Channel
+ */
 router.get("/mobile", Authorized, async (req, res) => {
     const ipComponents = req.socket.remoteAddress.split(":");
     const ipv4 = ipComponents[ipComponents.length - 1];
@@ -43,6 +46,9 @@ router.delete("/mobile", Authorized, async (req, res) => {
     }
 });
 
+/**
+ *
+ */
 router.get("/device", async (req, res) => {
     const ipComponents = req.socket.remoteAddress.split(":");
     const ipv4 = ipComponents[ipComponents.length - 1];

@@ -1,9 +1,11 @@
 const { Sleepstat } = require("../../models");
 const parseTossTurn = require("./parseTossTurn");
+const getActualSleepTime = require("./getActualSleepTime");
 
 async function makeNewSleepstat(userid, sleepstat) {
     const { sleep_start, sleep_stop, sensorData } = sleepstat;
     const toss_turn = parseTossTurn(sensorData);
+    const actual_sleep = getActualSleepTime(sleep_start, sleep_stop, toss_turn.length);
     console.log(toss_turn);
 
     try {
@@ -12,6 +14,7 @@ async function makeNewSleepstat(userid, sleepstat) {
             sleep_start,
             sleep_stop,
             toss_turn,
+            actual_sleep,
         });
 
         return {

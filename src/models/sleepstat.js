@@ -28,6 +28,10 @@ module.exports = (sequelize, DataTypes) => {
                 type: DataTypes.JSONB,
                 allowNull: true,
             },
+            actual_sleep: {
+                type: DataTypes.INTEGER,
+                allowNull: false,
+            },
         },
         {
             charset: "utf8", // 한국어 설정

@@ -20,6 +20,8 @@ async function getSleepstatsList(userid) {
                 sid: val.sid,
                 sleep_start: val.sleep_start,
                 sleep_stop: val.sleep_stop,
+                actual_sleep: val.actual_sleep,
+                toss_turn: val.toss_turn,
             };
         });
 
